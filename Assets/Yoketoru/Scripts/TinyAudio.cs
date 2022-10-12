@@ -2,6 +2,16 @@
 public class TinyAudio : MonoBehaviour
 {
     public static TinyAudio Instance { get; private set; }
+
+    public enum BGM
+    {
+        Gameover,
+        Clear
+    }
+
+    [Tooltip("BGM音源"), SerializeField]
+    AudioClip[] bgmList = default;
+
     /// <summary>
     /// seListに設定する効果音の種類を以下に定義します。
     /// </summary>
@@ -30,15 +40,15 @@ public class TinyAudio : MonoBehaviour
         Instance.audioSource.PlayOneShot(Instance.seList[(int)se]);
     }
 
-// Start is called before the first frame update
-void Start()
+    public static void StopBGM()
     {
-        
+        Instance.audioSource.Stop();
     }
 
-    // Update is called once per frame
-    void Update()
+    public static void PlayBGM(BGM bgm)
     {
-        
+        StopBGM();
+        Instance.audioSource.clip = Instance.bgmList[(int)bgm];
+        Instance.audioSource.Play();
     }
 }
