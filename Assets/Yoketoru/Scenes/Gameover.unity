@@ -238,7 +238,7 @@ GameObject:
   - component: {fileID: 1271431409}
   - component: {fileID: 1271431408}
   m_Layer: 5
-  m_Name: TitleButton
+  m_Name: GameoverButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
