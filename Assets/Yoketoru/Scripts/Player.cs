@@ -50,8 +50,7 @@ public class Player : MonoBehaviour
     {
         if(collision.collider.CompareTag("Enemy"))
         {
-            SceneManager.LoadScene("Gameover", LoadSceneMode.Additive);
-            Time.timeScale = 0;
+            GameManager.ToGameover();
         }
     }
 

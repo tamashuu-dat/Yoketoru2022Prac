@@ -17,14 +17,19 @@ public class GameManager : MonoBehaviour
 
     static int score;
     static float time;
-    static float StartTime => 10;//複数シーンで使いたいものは static を使う
+    static float StartTime => 10;//static をつけると、他スクリプトでも使用可能
+    static bool clear;
+    static bool gameover;
 
     private void Awake()
     {
         //this = 自分自身の(このスクリプトの)。score = 0;、time = StartTimeの前にも隠れている
         Instance = this;
-        score = 0;
+        ClearScore();
+        Item.ClearCount();
         time = StartTime;
+        clear = false;
+        gameover = false;
     }
 
     // Start is called before the first frame update
@@ -39,11 +44,11 @@ public class GameManager : MonoBehaviour
 #if DEBUG_KEY
         if (Input.GetKeyDown(KeyCode.O))
         {
-            SceneManager.LoadScene("Gameover", LoadSceneMode.Additive);
+            ToGameover();
         }
         else if (Input.GetKeyDown(KeyCode.C))
         {
-            SceneManager.LoadScene("Clear", LoadSceneMode.Additive);
+            ToClear();
         }
         else if(Input.GetKeyDown(KeyCode.P))
         {
@@ -96,5 +101,23 @@ public class GameManager : MonoBehaviour
         {
             Instance.UpdateScoreText();
         }
+    }
+
+    public static void ToClear()
+    {
+        if (clear || gameover) return;
+
+        clear = true;
+        SceneManager.LoadScene("Clear", LoadSceneMode.Additive);
+        Time.timeScale = 0;
+    }
+
+    public static void ToGameover()
+    {
+        if (clear || gameover) return;
+
+        gameover = true;
+        SceneManager.LoadScene("Gameover", LoadSceneMode.Additive);
+        Time.timeScale = 0f;
     }
 }
