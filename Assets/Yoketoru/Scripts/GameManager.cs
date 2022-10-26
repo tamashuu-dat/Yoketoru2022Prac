@@ -8,8 +8,12 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
     [SerializeField]
     TextMeshProUGUI scoreText = default;
+
+    static int ScoreMax => 99999;
 
     static int score;
     static float time;
@@ -17,6 +21,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        //this = 自分自身の(このスクリプトの)。score = 0;、time = StartTimeの前にも隠れている
+        Instance = this;
         score = 0;
         time = StartTime;
     }
@@ -41,17 +47,54 @@ public class GameManager : MonoBehaviour
         }
         else if(Input.GetKeyDown(KeyCode.P))
         {
-            score += 123;
-            UpdateScoreText();
+            AddPoint(12345);
         }
 #endif
     }
 
     void UpdateScoreText()
     {
-        if(scoreText!=null)
+        if(scoreText != null)
         {
             scoreText.text = $"{score:00000}";
+        }
+    }
+
+    public static void AddPoint(int add)
+    {
+        //score += add;
+
+        //上限チェックその１ 手続き型の典型
+        /*
+        if(score>ScoreMax)
+        {
+            score = ScoreMax;
+        }
+        */
+
+        //上限チェックその２ 手続き型の省略形（その１を１行にしたもの）
+        //score = score > ScoreMax ? ScoreMax : score;
+
+        //上限チェックその３ 関数型で近代的（scoreとScoreMaxのうち、小さい方を返す）
+        //score + add にしたおかげで、score += add; を省略できる
+        score = Mathf.Min(score + add, ScoreMax);
+
+        if(score > ScoreMax)
+        {
+            score = ScoreMax;
+        }
+        if(Instance != null)
+        {
+            Instance.UpdateScoreText();
+        }
+    }
+
+    public static void ClearScore()
+    {
+        score = 0;
+        if(Instance != null)
+        {
+            Instance.UpdateScoreText();
         }
     }
 }
